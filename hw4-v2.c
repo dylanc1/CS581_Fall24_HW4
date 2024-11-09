@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
         strcat(outputDir, "/");
     }
     char *filename = (char *)malloc(50);
-    sprintf(filename, "%soutput.%d.%d.%d-2", outputDir, n, iter, comm_sz);
+    sprintf(filename, "%soutput.%d.%d.%d.v2", outputDir, n, iter, comm_sz);
     
     /* compute counts and displacements */
     counts = (int *)malloc(comm_sz*sizeof(int));
@@ -248,9 +248,9 @@ void Read_vector(
             Check_for_error(local_ok, fname, "Can't allocate temporary vector", comm);
 
         /* Initialize the life matrix */
+        srand(0);
         for (i = 0; i < n*n; i++) {
-            srand(54321|i);
-            if (drand48() < 0.5) 
+            if (rand() % 2 == 1) 
                 a[i] = ALIVE ;
             else
                 a[i] = DIES ;
@@ -356,14 +356,23 @@ void compute_local( // local_x, n,counts,my_rank,comm_sz,comm
    
         flag=compute(life,temp,nRows,nCols);
   
-  
+        #ifdef DEBUG
+        if(my_rank == 0) {
+            printf("Iteration %d:\n", k);
+            for(int i = 0; i < local_n; i++) {
+                printf("%d ", temp[i/n + 1][i%n + 1]);
+                if((i + 1) % n == 0) printf("\n");
+            }
+            printf("\n");
+        }
+        #endif
         // Each MPI process sends its rank to reduction, root MPI process collects the result
         int reduction_flag = 0;
         MPI_Allreduce(&flag, &reduction_flag, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
     
         if(my_rank == 0){   
             if(!reduction_flag)
-                printf("The sum of all flag is %d after k=%d.\n", reduction_flag,k);
+                printf("The sum of all flags is %d after k=%d.\n", reduction_flag,k);
         }
         if(!reduction_flag) break;
 
@@ -373,11 +382,6 @@ void compute_local( // local_x, n,counts,my_rank,comm_sz,comm
         life = temp;
         temp = ptr;
     }
-    if(my_rank==0){
-        t2 = gettime();
-        printf("Time taken %f seconds for %d iterations\n", t2 - t1, k);
-    }
-
     for (i = 0; i < local_n; i++){
         row=i/n;
         col=i%n;
@@ -386,6 +390,17 @@ void compute_local( // local_x, n,counts,my_rank,comm_sz,comm
         col=col+1;
             
         local_x[i] = life[row][col];
+    }
+    if(my_rank==0){
+        #ifdef DEBUG
+        printf("Final board:\n");
+        for(int i = 0; i < local_n; i++) {
+            printf("%d ", local_x[i]);
+            if((i + 1) % n == 0) printf("\n");
+        }
+        #endif
+        t2 = gettime();
+        printf("Time taken %f seconds for %d iterations\n", t2 - t1, k);
     }
    
     freearray(life);
@@ -430,3 +445,4 @@ void gather_result(
     }
 
 }
+
