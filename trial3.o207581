@@ -1,0 +1,36 @@
+setting asax scratch directory
+ 
+============================================================
+=====         Summary of your script job               =====
+============================================================
+  The script file is: trialScript.sh
+  The time limit is 12:00:00 HH:MM:SS.
+  The target directory is: /home/ualclsd0145/CS581_Fall24_HW4
+  The working directory is:  /scratch-local/ualclsd0145.trial3.207581.asax-pbs1
+  The memory limit is: 20gb
+  The job will start running after: 202411090224.10
+  Job Name: trial3
+  Queue: -q class -W group_list=classq
+  Constraints: 
+  Using  20  cores on master node  asax020.asc.edu
+  Node list:  asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu asax020.asc.edu
+  Cores:  20
+  Command typed:
+/scripts/run_script_mpi trialScript.sh     
+  Queue submit command:
+qsub -q class -W group_list=classq -j oe -N trial3 -a 202411090224.10 -r n -M dmcanipe@crimson.ua.edu -l walltime=12:00:00 -l select=20:mpiprocs=1:mem=1000mb 
+ 
+Time taken 1224.209892 seconds for 5000 iterations
+Time taken 611.551270 seconds for 5000 iterations
+Time taken 306.125693 seconds for 5000 iterations
+Time taken 153.533749 seconds for 5000 iterations
+Time taken 122.985188 seconds for 5000 iterations
+Time taken 77.264142 seconds for 5000 iterations
+Time taken 62.235914 seconds for 5000 iterations
+Time taken 1209.269133 seconds for 5000 iterations
+Time taken 604.694865 seconds for 5000 iterations
+Time taken 302.367960 seconds for 5000 iterations
+Time taken 156.117312 seconds for 5000 iterations
+Time taken 122.553131 seconds for 5000 iterations
+Time taken 76.493774 seconds for 5000 iterations
+Time taken 61.553587 seconds for 5000 iterations
